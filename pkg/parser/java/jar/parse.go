@@ -6,8 +6,8 @@ import (
 	"bytes"
 	"context"
 	"crypto/sha1"
-	"encoding/xml"
 	"encoding/hex"
+	"encoding/xml"
 	"errors"
 	"io"
 	"os"
@@ -22,8 +22,8 @@ import (
 	"golang.org/x/xerrors"
 
 	"github.com/khulnasoft/dep-parser/pkg/licensing"
-	"github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	"github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 	xos "github.com/khulnasoft/dep-parser/pkg/x/os"
 )
@@ -201,7 +201,7 @@ func (p *Parser) traverseZip(size int64, r xio.ReadSeekerAt, fileProps Propertie
 	var foundPomProps bool
 
 	// License sources collected during the first pass.
-	pomXMLLicenses := make(map[string][]string)  // key: groupID:artifactID
+	pomXMLLicenses := make(map[string][]string) // key: groupID:artifactID
 	var licenseFiles []*zip.File
 
 	zr, err := zip.NewReader(r, size)
@@ -363,7 +363,11 @@ func parsePomProperties(f *zip.File, filePath string) (Properties, error) {
 	if err != nil {
 		return Properties{}, xerrors.Errorf("unable to open pom.properties: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Debugf("failed to close pom.properties file: %v", err)
+		}
+	}()
 
 	p := Properties{
 		FilePath: filePath,
@@ -422,7 +426,11 @@ func parsePomLicenses(f *zip.File) ([]string, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to open %s: %w", f.Name, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Debugf("failed to close pom license file: %v", err)
+		}
+	}()
 
 	return decodePomLicenses(file)
 }
@@ -500,7 +508,11 @@ func (p *Parser) classifyPackedLicense(f *zip.File) ([]string, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to open %s: %w", f.Name, err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Debugf("failed to close packed license file: %v", err)
+		}
+	}()
 
 	lf, err := licensing.Classify(f.Name, file, p.licenseConfidenceLevel)
 	if err != nil {
@@ -532,7 +544,11 @@ func parseManifest(f *zip.File) (manifest, error) {
 	if err != nil {
 		return manifest{}, xerrors.Errorf("unable to open MANIFEST.MF: %w", err)
 	}
-	defer file.Close()
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Debugf("failed to close MANIFEST.MF file: %v", err)
+		}
+	}()
 
 	return parseManifestMainSection(xio.MaxBytesReader(file, maxManifestSize))
 }

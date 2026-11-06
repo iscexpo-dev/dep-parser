@@ -11,6 +11,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/samber/lo/mutable"
 	"golang.org/x/net/html/charset"
+
+	"github.com/khulnasoft/dep-parser/pkg/log"
 )
 
 const trueString = "true"
@@ -164,7 +166,11 @@ func openSettings(filePath string) (settings, error) {
 	if err != nil {
 		return settings{}, err
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Debugf("failed to close settings file: %v", err)
+		}
+	}()
 
 	s := settings{}
 	decoder := xml.NewDecoder(f)

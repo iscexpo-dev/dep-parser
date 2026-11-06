@@ -23,10 +23,10 @@ import (
 	"golang.org/x/net/html/charset"
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
+	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
-	"github.com/khulnasoft/dep-parser/pkg/log"
 	xhttp "github.com/khulnasoft/dep-parser/pkg/x/http"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 	xslices "github.com/khulnasoft/dep-parser/pkg/x/slices"
@@ -688,7 +688,6 @@ func (p *Parser) filterDependencies(artifacts []artifact, exclusions map[string]
 	})
 }
 
-
 func excludeDep(exclusions map[string]struct{}, art artifact) bool {
 	if _, ok := exclusions[art.Name()]; ok {
 		return true
@@ -816,7 +815,11 @@ func (p *Parser) openPom(filePath string) (*pom, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("file open error (%s): %w", filePath, err)
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			log.Debugf("failed to close POM file: %v", err)
+		}
+	}()
 
 	content, err := parsePom(f, false)
 	if err != nil {
@@ -967,7 +970,11 @@ func (p *Parser) fetchPomFileNameFromMavenMetadata(ctx context.Context, repoURL 
 		p.logger.Debug("Failed to fetch", log.String("url", req.URL.Redacted()), log.Err(err))
 		return "", nil
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			p.logger.Debug("failed to close response body", log.Err(err))
+		}
+	}()
 
 	if resp.StatusCode == http.StatusTooManyRequests {
 		return "", newRateLimitError(req, resp)
@@ -1008,7 +1015,11 @@ func (p *Parser) fetchPOMFromRemoteRepository(ctx context.Context, repoURL url.U
 		p.logger.Debug("Failed to fetch", log.String("url", req.URL.Redacted()), log.Err(err))
 		return nil, nil
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			p.logger.Debug("failed to close response body", log.Err(err))
+		}
+	}()
 
 	if resp.StatusCode == http.StatusTooManyRequests {
 		return nil, newRateLimitError(req, resp)

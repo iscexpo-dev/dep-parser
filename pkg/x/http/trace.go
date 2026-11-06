@@ -139,12 +139,16 @@ func (tt *traceTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	}
 
 	coloredDump := colorizeHTTPDump(reqDump, true)
-	fmt.Fprintf(tt.writer, "\n%s\n%s\n", requestHeaderColor("--- HTTP REQUEST ---"), coloredDump)
+	if _, err := fmt.Fprintf(tt.writer, "\n%s\n%s\n", requestHeaderColor("--- HTTP REQUEST ---"), coloredDump); err != nil {
+		log.Debugf("failed to write HTTP request trace: %v", err)
+	}
 
 	// Make the request
 	resp, err := tt.inner.RoundTrip(req)
 	if err != nil {
-		fmt.Fprintf(tt.writer, "\n%s\n%v\n", errorHeaderColor("--- HTTP ERROR ---"), err)
+		if _, err := fmt.Fprintf(tt.writer, "\n%s\n%v\n", errorHeaderColor("--- HTTP ERROR ---"), err); err != nil {
+			log.Debugf("failed to write HTTP error trace: %v", err)
+		}
 		return nil, err
 	} else if resp == nil {
 		return nil, nil
@@ -156,7 +160,9 @@ func (tt *traceTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		log.Debug("Failed to dump HTTP response", log.Err(err))
 	} else {
 		coloredDump = colorizeHTTPDump(respDump, false)
-		fmt.Fprintf(tt.writer, "\n%s\n%s\n", responseHeaderColor("--- HTTP RESPONSE ---"), coloredDump)
+		if _, err := fmt.Fprintf(tt.writer, "\n%s\n%s\n", responseHeaderColor("--- HTTP RESPONSE ---"), coloredDump); err != nil {
+			log.Debugf("failed to write HTTP response trace: %v", err)
+		}
 	}
 
 	return resp, nil

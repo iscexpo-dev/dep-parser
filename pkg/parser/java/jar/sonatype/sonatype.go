@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/go-retryablehttp"
 	"golang.org/x/xerrors"
 
+	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/parser/java/jar"
 )
 
@@ -97,7 +98,11 @@ func (s Sonatype) Exists(groupID, artifactID string) (bool, error) {
 	if err != nil {
 		return false, xerrors.Errorf("http error: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Debugf("failed to close response body: %v", err)
+		}
+	}()
 
 	var res apiResponse
 	if err = json.NewDecoder(resp.Body).Decode(&res); err != nil {
@@ -123,7 +128,11 @@ func (s Sonatype) SearchBySHA1(sha1 string) (jar.Properties, error) {
 	if err != nil {
 		return jar.Properties{}, xerrors.Errorf("sha1 search error: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Debugf("failed to close response body: %v", err)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return jar.Properties{}, xerrors.Errorf("status %s from %s", resp.Status, req.URL.String())
@@ -169,7 +178,11 @@ func (s Sonatype) SearchByArtifactID(artifactID, _ string) (string, error) {
 	if err != nil {
 		return "", xerrors.Errorf("artifactID search error: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Debugf("failed to close response body: %v", err)
+		}
+	}()
 
 	if resp.StatusCode != http.StatusOK {
 		return "", xerrors.Errorf("status %s from %s", resp.Status, req.URL.String())

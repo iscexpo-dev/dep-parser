@@ -216,7 +216,11 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error opening %s: %v\n", filePath, err)
 		os.Exit(1)
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Fprintf(os.Stderr, "error closing %s: %v\n", filePath, err)
+		}
+	}()
 
 	rsa, err := xio.NewReadSeekerAt(f)
 	if err != nil {

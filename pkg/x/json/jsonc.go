@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"io"
+
+	"github.com/khulnasoft/dep-parser/pkg/log"
 )
 
 // TokenType represents the type of token being processed
@@ -204,7 +206,9 @@ func (p *jsoncParser) processNormalToken(b byte) {
 		}
 
 		// Not a comment, put the byte back
-		p.reader.UnreadByte()
+		if err := p.reader.UnreadByte(); err != nil {
+			log.Debugf("failed to unread byte: %v", err)
+		}
 	case ']', '}':
 		// Handle trailing comma - look backward
 		p.handleTrailingComma()

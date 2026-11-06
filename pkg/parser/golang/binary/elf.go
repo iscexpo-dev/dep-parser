@@ -26,7 +26,11 @@ func (p *Parser) elfSymbolVersion(r io.ReaderAt, moduleName string) string {
 		p.logger.Debug("Not an ELF binary, skipping symbol table lookup", log.Err(err))
 		return ""
 	}
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			p.logger.Debug("failed to close ELF file", log.Err(err))
+		}
+	}()
 
 	syms, err := f.Symbols()
 	if err != nil {
