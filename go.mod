@@ -35,3 +35,8 @@ require (
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 )
+
+replace (
+	github.com/aquasecurity/go-pep440-version => github.com/khulnasoft-lab/go-pep440-version v1.0.0
+	github.com/aquasecurity/go-version => github.com/khulnasoft/goversify v0.0.0-20250310221534-b7b4cecdfb37
+)
