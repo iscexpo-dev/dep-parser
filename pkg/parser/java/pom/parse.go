@@ -233,13 +233,14 @@ func (p *Parser) Parse(ctx context.Context, r xio.ReadSeekerAt) ([]ftypes.Packag
 	rootArt := result.artifact
 	rootArt.Relationship = ftypes.RelationshipRoot
 
-	return p.parseRoot(ctx, rootArt, nil)
+	pkgs, deps, _, err := p.parseRoot(ctx, rootArt, nil, make(map[string]string))
+	return pkgs, deps, err
 }
 
 // nolint: gocyclo
-func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []string) ([]ftypes.Package, []ftypes.Dependency, error) {
+func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []string, firstDepPath map[string]string) ([]ftypes.Package, []ftypes.Dependency, []string, error) {
 	if root.RootFilePath == "" {
-		return nil, nil, xerrors.New("root file path is required for package ID generation")
+		return nil, nil, nil, xerrors.New("root file path is required for package ID generation")
 	}
 
 	// Prepare a queue for dependencies
@@ -255,6 +256,7 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 		rootDepManagement []pomDependency
 		uniqArtifacts     = make(map[string]artifact)
 		uniqDeps          = make(map[string][]string)
+		artifactDepPaths  = make(map[string]string)
 	)
 
 	// Iterate direct and transitive dependencies
@@ -270,9 +272,15 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 			}
 			uniqModules = append(uniqModules, id)
 
-			modulePkgs, moduleDeps, err := p.parseRoot(ctx, art, uniqModules)
+			modulePkgs, moduleDeps, moduleUniqModules, err := p.parseRoot(ctx, art, uniqModules, firstDepPath)
 			if err != nil {
-				return nil, nil, err
+				return nil, nil, nil, err
+			}
+			// Merge modules found in recursive call, avoiding duplicates
+			for _, m := range moduleUniqModules {
+				if !slices.Contains(uniqModules, m) {
+					uniqModules = append(uniqModules, m)
+				}
 			}
 
 			pkgs = append(pkgs, modulePkgs...)
@@ -302,14 +310,14 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 
 		result, err := p.resolve(ctx, art, rootDepManagement)
 		if err != nil {
-			return nil, nil, xerrors.Errorf("resolve error (%s): %w", art, err)
+			return nil, nil, nil, xerrors.Errorf("resolve error (%s): %w", art, err)
 		}
 
 		if art.Relationship == ftypes.RelationshipRoot || art.Relationship == ftypes.RelationshipWorkspace {
 			// Managed dependencies in the root POM affect transitive dependencies
 			rootDepManagement, err = p.resolveDepManagement(ctx, result.properties, result.dependencyManagement)
 			if err != nil {
-				return nil, nil, xerrors.Errorf("unable to resolve dep management: %w", err)
+				return nil, nil, nil, xerrors.Errorf("unable to resolve dep management: %w", err)
 			}
 
 			// mark its dependencies as "direct"
@@ -349,14 +357,29 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 			dependsOn := xslices.Map(result.dependencies, func(a artifact) string {
 				return a.Name()
 			})
-			uniqDeps[packageID(art.Name(), art.Version.String(), root.RootFilePath)] = dependsOn
+			// For non-root/non-module artifacts that have dependencies (non-leaf),
+			// use the first-seen path for each GAV to ensure consistent package IDs
+			// across module contexts. Leaf artifacts and root/workspace artifacts
+			// use their own path.
+			depPath := root.RootFilePath
+			if art.Relationship != ftypes.RelationshipRoot && art.Relationship != ftypes.RelationshipWorkspace && len(result.dependencies) > 0 {
+				gav := art.Name() + ":" + art.Version.String()
+				if p, ok := firstDepPath[gav]; ok {
+					depPath = p
+				} else {
+					firstDepPath[gav] = root.RootFilePath
+				}
+			}
+			artifactDepPaths[art.Name()] = depPath
+			uniqDeps[packageID(art.Name(), art.Version.String(), depPath)] = dependsOn
 		}
 	}
 
 	// Convert to []ftypes.Package and []ftypes.Dependency
 	for name, art := range uniqArtifacts {
+		depPath := artifactDepPaths[name]
 		pkg := ftypes.Package{
-			ID:           packageID(name, art.Version.String(), root.RootFilePath),
+			ID:           packageID(name, art.Version.String(), depPath),
 			Name:         name,
 			Version:      art.Version.String(),
 			Licenses:     art.Licenses,
@@ -368,7 +391,8 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 		// Convert dependency names into dependency IDs
 		dependsOn := lo.FilterMap(uniqDeps[pkg.ID], func(dependOnName string, _ int) (string, bool) {
 			ver := depVersion(dependOnName, uniqArtifacts)
-			return packageID(dependOnName, ver, root.RootFilePath), ver != ""
+			depDepPath := artifactDepPaths[dependOnName]
+			return packageID(dependOnName, ver, depDepPath), ver != ""
 		})
 
 		// `mvn` shows modules separately from the root package and does not show module nesting.
@@ -386,10 +410,14 @@ func (p *Parser) parseRoot(ctx context.Context, root artifact, uniqModules []str
 		}
 	}
 
-	sort.Sort(pkgs)
-	sort.Sort(deps)
+	sort.SliceStable(pkgs, func(i, j int) bool {
+		return pkgs.Less(i, j)
+	})
+	sort.SliceStable(deps, func(i, j int) bool {
+		return deps.Less(i, j)
+	})
 
-	return pkgs, deps, nil
+	return pkgs, deps, uniqModules, nil
 }
 
 // depVersion finds dependency in uniqArtifacts and return its version

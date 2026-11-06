@@ -1460,7 +1460,7 @@ func TestPom_Parse(t *testing.T) {
 					Relationship: ftypes.RelationshipWorkspace,
 				},
 				{
-					ID:           "org.example:example-dependency:1.2.5::e2ecf3a4",
+					ID:           "org.example:example-dependency:1.2.5::e3e3d7fe",
 					Name:         "org.example:example-dependency",
 					Version:      "1.2.5",
 					Relationship: ftypes.RelationshipDirect,
@@ -1521,7 +1521,7 @@ func TestPom_Parse(t *testing.T) {
 				{
 					ID: "com.example:module2:2.0.0::e4f6bb04",
 					DependsOn: []string{
-						"org.example:example-dependency:1.2.5::e2ecf3a4",
+						"org.example:example-dependency:1.2.5::e3e3d7fe",
 					},
 				},
 				{
@@ -1532,7 +1532,7 @@ func TestPom_Parse(t *testing.T) {
 					},
 				},
 				{
-					ID: "org.example:example-dependency:1.2.5::e2ecf3a4",
+					ID: "org.example:example-dependency:1.2.5::e3e3d7fe",
 					DependsOn: []string{
 						"org.example:example-api:2.0.0::6c475df9",
 					},

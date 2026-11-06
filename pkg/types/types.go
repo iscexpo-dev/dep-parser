@@ -1,6 +1,8 @@
 package types
 
 import (
+	"slices"
+
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 )
 
@@ -57,7 +59,10 @@ type Dependencies []Dependency
 
 func (deps Dependencies) Len() int { return len(deps) }
 func (deps Dependencies) Less(i, j int) bool {
-	return deps[i].ID < deps[j].ID
+	if deps[i].ID != deps[j].ID {
+		return deps[i].ID < deps[j].ID
+	}
+	return slices.Compare(deps[j].DependsOn, deps[i].DependsOn) < 0
 }
 func (deps Dependencies) Swap(i, j int) { deps[i], deps[j] = deps[j], deps[i] }
 
