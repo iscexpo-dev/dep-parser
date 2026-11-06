@@ -11,7 +11,7 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/xerrors"
 
-	version "github.com/khulnasoft-lab/go-pep440-version"
+	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
@@ -165,6 +165,6 @@ func isValidName(name string) bool {
 }
 
 func isValidVersion(ver string) bool {
-	_, err := version.Parse(ver)
+	_, err := pep440.Parse(ver)
 	return err == nil
 }

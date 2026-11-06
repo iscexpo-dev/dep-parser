@@ -8,7 +8,7 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	"github.com/khulnasoft/goversify/pkg/version"
+	"github.com/khulnasoft/go-version-lib/pkg/version"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"

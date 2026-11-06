@@ -6,7 +6,7 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	goversion "github.com/khulnasoft/goversify/pkg/version"
+	version "github.com/khulnasoft/go-version-lib/pkg/version"
 	"github.com/khulnasoft/dep-parser/pkg"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
@@ -112,7 +112,7 @@ func (p Parser) relationship(dep string) ftypes.Relationship {
 
 // minVersionOfConstrain returns the minimum acceptable version for constraint
 func minVersionOfConstrain(constraint string) (string, error) {
-	css, err := goversion.NewConstraints(constraint)
+	css, err := version.NewConstraints(constraint)
 	if err != nil {
 		return "", xerrors.Errorf("unable to parse constraints: %w", err)
 	}

@@ -21,14 +21,14 @@ var (
 			},
 		},
 		{
-			ID:           "github.com/khulnasoft/goversify@v0.0.0-20240603093900-cf8a8d29271d",
-			Name:         "github.com/khulnasoft/goversify",
+			ID:           "github.com/khulnasoft/go-version-lib@v0.0.0-20240603093900-cf8a8d29271d",
+			Name:         "github.com/khulnasoft/go-version-lib",
 			Version:      "v0.0.0-20240603093900-cf8a8d29271d",
 			Relationship: ftypes.RelationshipDirect,
 			ExternalReferences: []ftypes.ExternalRef{
 				{
 					Type: ftypes.RefVCS,
-					URL:  "https://github.com/khulnasoft/goversify",
+					URL:  "https://github.com/khulnasoft/go-version-lib",
 				},
 			},
 		},
@@ -86,7 +86,7 @@ var (
 		{
 			ID: "github.com/org/repo",
 			DependsOn: []string{
-				"github.com/khulnasoft/goversify@v0.0.0-20240603093900-cf8a8d29271d",
+				"github.com/khulnasoft/go-version-lib@v0.0.0-20240603093900-cf8a8d29271d",
 				"stdlib@v1.22.5",
 			},
 		},
@@ -100,7 +100,7 @@ var (
 		{
 			ID: "github.com/org/repo",
 			DependsOn: []string{
-				"github.com/khulnasoft/goversify@v0.0.0-20240603093900-cf8a8d29271d",
+				"github.com/khulnasoft/go-version-lib@v0.0.0-20240603093900-cf8a8d29271d",
 			},
 		},
 	}

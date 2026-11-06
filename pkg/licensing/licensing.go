@@ -3,6 +3,7 @@ package licensing
 import (
 	"bufio"
 	"io"
+	"regexp"
 	"strings"
 )
 
@@ -25,13 +26,14 @@ func (LicenseFileNames) Contains(stem string) bool {
 
 // SPDXLicenseIDByURL maps a license URL to its SPDX identifier.
 // An unresolved URL returns ("", false).
+// All case values are lowercase because the input is lowercased before comparison.
 func SPDXLicenseIDByURL(url string) (string, bool) {
 	switch strings.ToLower(strings.TrimSpace(url)) {
 	case "http://www.apache.org/licenses/license-2.0", "https://www.apache.org/licenses/license-2.0",
 		"http://www.apache.org/licenses/license-2.0.txt", "https://www.apache.org/licenses/license-2.0.txt":
 		return "Apache-2.0", true
 	case "http://opensource.org/licenses/mit-license", "https://opensource.org/licenses/mit-license",
-		"http://opensource.org/licenses/MIT", "https://opensource.org/licenses/MIT":
+		"http://opensource.org/licenses/mit", "https://opensource.org/licenses/mit":
 		return "MIT", true
 	case "http://www.gnu.org/licenses/gpl-2.0", "https://www.gnu.org/licenses/gpl-2.0":
 		return "GPL-2.0", true
@@ -41,16 +43,18 @@ func SPDXLicenseIDByURL(url string) (string, bool) {
 		return "LGPL-2.1", true
 	case "http://www.gnu.org/licenses/lgpl-3.0", "https://www.gnu.org/licenses/lgpl-3.0":
 		return "LGPL-3.0", true
-	case "https://opensource.org/licenses/BSD-2-Clause", "http://opensource.org/licenses/BSD-2-Clause":
+	case "https://opensource.org/licenses/bsd-2-clause", "http://opensource.org/licenses/bsd-2-clause":
 		return "BSD-2-Clause", true
-	case "https://opensource.org/licenses/BSD-3-Clause", "http://opensource.org/licenses/BSD-3-Clause":
+	case "https://opensource.org/licenses/bsd-3-clause", "http://opensource.org/licenses/bsd-3-clause":
 		return "BSD-3-Clause", true
-	case "https://opensource.org/licenses/ISC", "http://opensource.org/licenses/ISC":
+	case "https://opensource.org/licenses/isc", "http://opensource.org/licenses/isc":
 		return "ISC", true
-	case "https://spdx.org/licenses/Unlicense.html", "http://spdx.org/licenses/Unlicense.html":
+	case "https://spdx.org/licenses/unlicense.html", "http://spdx.org/licenses/unlicense.html":
 		return "Unlicense", true
-	case "https://opensource.org/licenses/MIT-0", "http://opensource.org/licenses/MIT-0":
+	case "https://opensource.org/licenses/mit-0", "http://opensource.org/licenses/mit-0":
 		return "MIT-0", true
+	case "http://www.eclipse.org/legal/epl-v10.html", "https://www.eclipse.org/legal/epl-v10.html":
+		return "EPL-1.0", true
 	}
 	return "", false
 }
@@ -78,6 +82,8 @@ func SPDXLicenseID(name string) (string, bool) {
 		return "ISC", true
 	case "unlicense":
 		return "Unlicense", true
+	case "eclipse public license, version 1.0":
+		return "EPL-1.0", true
 	case "mit-0":
 		return "MIT-0", true
 	}
@@ -144,6 +150,13 @@ func Classify(name string, file io.Reader, confidenceLevel float64) (*LicenseFin
 		content.WriteString("\n")
 	}
 	text := strings.ToLower(content.String())
+
+	// Remove parenthetical content (e.g. "Apache (Software) License" -> "Apache License")
+	// so that parenthesized qualifiers do not prevent pattern matching.
+	re := regexp.MustCompile(`\([^)]*\)`)
+	text = re.ReplaceAllString(text, " ")
+	// Collapse multiple spaces introduced by removal.
+	text = strings.Join(strings.Fields(text), " ")
 
 	// Detect common license headers
 	switch {

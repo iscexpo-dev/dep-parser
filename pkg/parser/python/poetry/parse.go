@@ -7,7 +7,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"golang.org/x/xerrors"
 
-	version "github.com/khulnasoft-lab/go-pep440-version"
+	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
 	"github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/parser/python"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
@@ -137,12 +137,12 @@ func (p *Parser) parseDependency(name string, versRange any, pkgVersions map[str
 
 // matchVersion checks if the package version satisfies the given constraint.
 func matchVersion(currentVersion, constraint string) (bool, error) {
-	v, err := version.Parse(currentVersion)
+		v, err := pep440.Parse(currentVersion)
 	if err != nil {
 		return false, xerrors.Errorf("python version error (%s): %s", currentVersion, err)
 	}
 
-	c, err := version.NewSpecifiers(constraint, version.WithPreRelease(true))
+	c, err := pep440.NewSpecifiers(constraint, pep440.WithPreRelease(true))
 	if err != nil {
 		return false, xerrors.Errorf("python constraint error (%s): %s", constraint, err)
 	}

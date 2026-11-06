@@ -13,7 +13,7 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	"github.com/khulnasoft/goversify/pkg/semver"
+	"github.com/khulnasoft/go-version-lib/pkg/semver"
 	"github.com/khulnasoft/dep-parser/pkg"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"

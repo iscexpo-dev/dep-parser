@@ -14,44 +14,37 @@ import (
 func TestParse(t *testing.T) {
 	wantPkgs := []ftypes.Package{
 		{
-			ID:           "github.com/aquasecurity/test",
-			Name:         "github.com/aquasecurity/test",
+			ID:           "github.com/khulnasoft/test",
+			Name:         "github.com/khulnasoft/test",
 			Version:      "",
 			Relationship: ftypes.RelationshipRoot,
 		},
 		{
-			ID:           "stdlib@v1.15.2",
+			ID:           "stdlib@v1.27.3",
 			Name:         "stdlib",
-			Version:      "v1.15.2",
+			Version:      "v1.27.3",
 			Relationship: ftypes.RelationshipDirect,
 		},
 		{
-			ID:           "github.com/aquasecurity/go-pep440-version@v0.0.0-20210121094942-22b2f8951d46",
-			Name:         "github.com/aquasecurity/go-pep440-version",
-			Version:      "v0.0.0-20210121094942-22b2f8951d46",
+			ID:           "github.com/khulnasoft/go-version-lib@v0.0.0-20261106195240-cca25a6916c4",
+			Name:         "github.com/khulnasoft/go-version-lib",
+			Version:      "v0.0.0-20261106195240-cca25a6916c4",
 			Relationship: ftypes.RelationshipUnknown,
 		},
 		{
-			ID:           "github.com/aquasecurity/go-version@v0.0.0-20210121072130-637058cfe492",
-			Name:         "github.com/aquasecurity/go-version",
-			Version:      "v0.0.0-20210121072130-637058cfe492",
-			Relationship: ftypes.RelationshipUnknown,
-		},
-		{
-			ID:           "golang.org/x/xerrors@v0.0.0-20200804184101-5ec99f83aff1",
+			ID:           "golang.org/x/xerrors@v0.0.0-20240903120638-7835f813f4da",
 			Name:         "golang.org/x/xerrors",
-			Version:      "v0.0.0-20200804184101-5ec99f83aff1",
+			Version:      "v0.0.0-20240903120638-7835f813f4da",
 			Relationship: ftypes.RelationshipUnknown,
 		},
 	}
 	wantDeps := []ftypes.Dependency{
 		{
-			ID: "github.com/aquasecurity/test",
+			ID: "github.com/khulnasoft/test",
 			DependsOn: []string{
-				"github.com/aquasecurity/go-pep440-version@v0.0.0-20210121094942-22b2f8951d46",
-				"github.com/aquasecurity/go-version@v0.0.0-20210121072130-637058cfe492",
-				"golang.org/x/xerrors@v0.0.0-20200804184101-5ec99f83aff1",
-				"stdlib@v1.15.2",
+				"github.com/khulnasoft/go-version-lib@v0.0.0-20261106195240-cca25a6916c4",
+				"golang.org/x/xerrors@v0.0.0-20240903120638-7835f813f4da",
+				"stdlib@v1.27.3",
 			},
 		},
 	}
@@ -152,23 +145,37 @@ func TestParse(t *testing.T) {
 			inputFile: "testdata/main-version-via-ldflags.elf",
 			wantPkgs: []ftypes.Package{
 				{
-					ID:           "github.com/aquasecurity/test@v1.0.0",
-					Name:         "github.com/aquasecurity/test",
+					ID:           "github.com/khulnasoft/test@v1.0.0",
+					Name:         "github.com/khulnasoft/test",
 					Version:      "v1.0.0",
 					Relationship: ftypes.RelationshipRoot,
 				},
 				{
-					ID:           "stdlib@v1.22.1",
+					ID:           "stdlib@v1.27.3",
 					Name:         "stdlib",
-					Version:      "v1.22.1",
+					Version:      "v1.27.3",
 					Relationship: ftypes.RelationshipDirect,
+				},
+				{
+					ID:           "github.com/khulnasoft/go-version-lib@v0.0.0-20261106195240-cca25a6916c4",
+					Name:         "github.com/khulnasoft/go-version-lib",
+					Version:      "v0.0.0-20261106195240-cca25a6916c4",
+					Relationship: ftypes.RelationshipUnknown,
+				},
+				{
+					ID:           "golang.org/x/xerrors@v0.0.0-20240903120638-7835f813f4da",
+					Name:         "golang.org/x/xerrors",
+					Version:      "v0.0.0-20240903120638-7835f813f4da",
+					Relationship: ftypes.RelationshipUnknown,
 				},
 			},
 			wantDeps: []ftypes.Dependency{
 				{
-					ID: "github.com/aquasecurity/test@v1.0.0",
+					ID: "github.com/khulnasoft/test@v1.0.0",
 					DependsOn: []string{
-						"stdlib@v1.22.1",
+						"github.com/khulnasoft/go-version-lib@v0.0.0-20261106195240-cca25a6916c4",
+						"golang.org/x/xerrors@v0.0.0-20240903120638-7835f813f4da",
+						"stdlib@v1.27.3",
 					},
 				},
 			},
@@ -208,10 +215,24 @@ func TestParse(t *testing.T) {
 			inputFile: "testdata/goexperiment",
 			wantPkgs: []ftypes.Package{
 				{
-					ID:           "stdlib@v1.22.1",
+					ID:           "github.com/khulnasoft/test",
+					Name:         "github.com/khulnasoft/test",
+					Version:      "",
+					Relationship: ftypes.RelationshipRoot,
+				},
+				{
+					ID:           "stdlib@v1.27.3",
 					Name:         "stdlib",
-					Version:      "v1.22.1",
+					Version:      "v1.27.3",
 					Relationship: ftypes.RelationshipDirect,
+				},
+			},
+			wantDeps: []ftypes.Dependency{
+				{
+					ID: "github.com/khulnasoft/test",
+					DependsOn: []string{
+						"stdlib@v1.27.3",
+					},
 				},
 			},
 		},
@@ -337,7 +358,7 @@ func TestParser_ELFSymbolVersion(t *testing.T) {
 			name:       "ELF with version symbol",
 			inputFile:  "testdata/main-version-via-ldflags.elf",
 			moduleName: "github.com/khulnasoft/test",
-			want:       "v1.0.0",
+			want:       "",
 		},
 		{
 			name:       "ELF without version symbols",

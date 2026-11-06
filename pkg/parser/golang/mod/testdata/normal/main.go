@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/khulnasoft/goversify/pkg/version"
+	"github.com/khulnasoft/go-version-lib/pkg/version"
 )
 
 func main() {

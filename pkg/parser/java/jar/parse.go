@@ -3,6 +3,7 @@ package jar
 import (
 	"archive/zip"
 	"bufio"
+	"bytes"
 	"context"
 	"crypto/sha1"
 	"encoding/xml"
@@ -148,7 +149,9 @@ func (p *Parser) resolveArtifact(r xio.ReadSeekerAt, m manifest, fileProps Prope
 			p.logger.Debug("Unable to identify POM in offline mode", log.String("file", fileName))
 			return types.Package{}, false, nil
 		}
-		return manifestProps.Package(), true, nil
+		pkg := manifestProps.Package()
+		pkg.Licenses = m.licenseNames()
+		return pkg, true, nil
 	}
 
 	if manifestProps.Valid() {
@@ -156,7 +159,9 @@ func (p *Parser) resolveArtifact(r xio.ReadSeekerAt, m manifest, fileProps Prope
 		// We have to make sure that the artifact exists actually.
 		if ok, _ := p.client.Exists(manifestProps.GroupID, manifestProps.ArtifactID); ok {
 			// If groupId and artifactId are valid, they will be returned.
-			return manifestProps.Package(), true, nil
+			pkg := manifestProps.Package()
+			pkg.Licenses = m.licenseNames()
+			return pkg, true, nil
 		}
 	}
 
@@ -195,11 +200,41 @@ func (p *Parser) traverseZip(size int64, r xio.ReadSeekerAt, fileProps Propertie
 	var m manifest
 	var foundPomProps bool
 
+	// License sources collected during the first pass.
+	pomXMLLicenses := make(map[string][]string)  // key: groupID:artifactID
+	var licenseFiles []*zip.File
+
 	zr, err := zip.NewReader(r, size)
 	if err != nil {
 		return nil, manifest{}, false, nil, xerrors.Errorf("zip error: %w", err)
 	}
 
+	// Pass 1: collect license sources (pom.xml and packed LICENSE files).
+	for _, fileInJar := range zr.File {
+		switch {
+		case strings.HasSuffix(fileInJar.Name, "/pom.xml") &&
+			strings.Contains(fileInJar.Name, "META-INF/maven/"):
+			if groupID, artifactID, ok := embeddedPomGAV(fileInJar.Name); ok {
+				lic, err := parsePomLicenses(fileInJar)
+				if err == nil && len(lic) > 0 {
+					pomXMLLicenses[packageName(groupID, artifactID)] = lic
+				}
+			}
+		case isJarLicenseFile(fileInJar.Name):
+			licenseFiles = append(licenseFiles, fileInJar)
+		}
+	}
+
+	// Resolve packed LICENSE file licenses (only when unambiguous: a single file).
+	var packedLicenses []string
+	if len(licenseFiles) == 1 {
+		lic, err := p.classifyPackedLicense(licenseFiles[0])
+		if err == nil {
+			packedLicenses = lic
+		}
+	}
+
+	// Pass 2: create packages and attach licenses.
 	for _, fileInJar := range zr.File {
 		switch {
 		case filepath.Base(fileInJar.Name) == "pom.properties":
@@ -209,7 +244,11 @@ func (p *Parser) traverseZip(size int64, r xio.ReadSeekerAt, fileProps Propertie
 			}
 			// Validation of props to avoid getting packages with empty Name/Version
 			if props.Valid() {
-				pkgs = append(pkgs, props.Package())
+				pkg := props.Package()
+				if lic, ok := pomXMLLicenses[packageName(props.GroupID, props.ArtifactID)]; ok {
+					pkg.Licenses = lic
+				}
+				pkgs = append(pkgs, pkg)
 
 				// Check if the pom.properties is for the original JAR/WAR/EAR
 				if fileProps.ArtifactID == props.ArtifactID && fileProps.Version == props.Version {
@@ -229,6 +268,13 @@ func (p *Parser) traverseZip(size int64, r xio.ReadSeekerAt, fileProps Propertie
 			}
 			pkgs = append(pkgs, innerPkgs...)
 		}
+	}
+
+	// Attach packed LICENSE licenses only when the zip contains a single package
+	// (the LICENSE file unambiguously belongs to that one project) and no license
+	// was already sourced from an embedded pom.xml.
+	if len(pkgs) == 1 && len(pkgs[0].Licenses) == 0 && len(packedLicenses) > 0 {
+		pkgs[0].Licenses = packedLicenses
 	}
 
 	return pkgs, m, foundPomProps, nil, nil
@@ -385,8 +431,16 @@ func parsePomLicenses(f *zip.File) ([]string, error) {
 // The <name> is kept as-is (normalization happens downstream); when it is empty,
 // the <url> is used as a fallback but only if it resolves to an SPDX license ID.
 func decodePomLicenses(r io.Reader) ([]string, error) {
+	// Maven pom.xml files use a default XML namespace. Strip it so the
+	// decoder can match elements without namespace qualification.
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, xerrors.Errorf("read error: %w", err)
+	}
+	stripped := stripXMLNamespace(data)
+
 	var pom embeddedPom
-	decoder := xml.NewDecoder(r)
+	decoder := xml.NewDecoder(bytes.NewReader(stripped))
 	decoder.CharsetReader = charset.NewReaderLabel
 	if err := decoder.Decode(&pom); err != nil {
 		return nil, xerrors.Errorf("xml decode error: %w", err)
@@ -399,6 +453,12 @@ func decodePomLicenses(r io.Reader) ([]string, error) {
 		}
 	}
 	return names, nil
+}
+
+// stripXMLNamespace removes xmlns declarations from XML content so that
+// elements can be matched without namespace qualification.
+func stripXMLNamespace(data []byte) []byte {
+	return bytes.ReplaceAll(data, []byte(` xmlns="http://maven.apache.org/POM/4.0.0"`), nil)
 }
 
 // pomLicenseName resolves a single pom <license> to a license value: the <name>
