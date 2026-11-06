@@ -22,11 +22,11 @@ func TestParser_Parse(t *testing.T) {
 			inputFile: "testdata/happy.lockfile",
 			want: []ftypes.Package{
 				{
-					ID:      "cglib:cglib-nodep:2.1.2",
-					Name:    "cglib:cglib-nodep",
-					Version: "2.1.2",
-			Relationship: ftypes.RelationshipUnknown,
-					Dev:     false,
+					ID:           "cglib:cglib-nodep:2.1.2",
+					Name:         "cglib:cglib-nodep",
+					Version:      "2.1.2",
+					Relationship: ftypes.RelationshipUnknown,
+					Dev:          false,
 					Locations: []ftypes.Location{
 						{
 							StartLine: 4,
@@ -35,11 +35,11 @@ func TestParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					ID:      "junit:junit:4.13.2",
-					Name:    "junit:junit",
-					Version: "4.13.2",
-			Relationship: ftypes.RelationshipUnknown,
-					Dev:     true,
+					ID:           "junit:junit:4.13.2",
+					Name:         "junit:junit",
+					Version:      "4.13.2",
+					Relationship: ftypes.RelationshipUnknown,
+					Dev:          true,
 					Locations: []ftypes.Location{
 						{
 							StartLine: 5,
@@ -48,11 +48,11 @@ func TestParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					ID:      "org.springframework:spring-asm:3.1.3.RELEASE",
-					Name:    "org.springframework:spring-asm",
-					Version: "3.1.3.RELEASE",
-			Relationship: ftypes.RelationshipUnknown,
-					Dev:     false,
+					ID:           "org.springframework:spring-asm:3.1.3.RELEASE",
+					Name:         "org.springframework:spring-asm",
+					Version:      "3.1.3.RELEASE",
+					Relationship: ftypes.RelationshipUnknown,
+					Dev:          false,
 					Locations: []ftypes.Location{
 						{
 							StartLine: 6,
@@ -61,11 +61,11 @@ func TestParser_Parse(t *testing.T) {
 					},
 				},
 				{
-					ID:      "org.springframework:spring-beans:5.0.5.RELEASE",
-					Name:    "org.springframework:spring-beans",
-					Version: "5.0.5.RELEASE",
-			Relationship: ftypes.RelationshipUnknown,
-					Dev:     false,
+					ID:           "org.springframework:spring-beans:5.0.5.RELEASE",
+					Name:         "org.springframework:spring-beans",
+					Version:      "5.0.5.RELEASE",
+					Relationship: ftypes.RelationshipUnknown,
+					Dev:          false,
 					Locations: []ftypes.Location{
 						{
 							StartLine: 7,

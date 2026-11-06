@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"

@@ -11,9 +11,9 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/licensing"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	"github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 )
 

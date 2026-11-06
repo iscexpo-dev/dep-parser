@@ -19,11 +19,11 @@ var (
 	// locations are filled manually
 	composerPkgs = []ftypes.Package{
 		{
-			ID:       "guzzlehttp/guzzle@6.5.8",
-			Name:     "guzzlehttp/guzzle",
-			Version:  "6.5.8",
+			ID:           "guzzlehttp/guzzle@6.5.8",
+			Name:         "guzzlehttp/guzzle",
+			Version:      "6.5.8",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 9,
@@ -32,11 +32,11 @@ var (
 			},
 		},
 		{
-			ID:       "guzzlehttp/promises@1.5.2",
-			Name:     "guzzlehttp/promises",
-			Version:  "1.5.2",
+			ID:           "guzzlehttp/promises@1.5.2",
+			Name:         "guzzlehttp/promises",
+			Version:      "1.5.2",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 124,
@@ -45,11 +45,11 @@ var (
 			},
 		},
 		{
-			ID:       "guzzlehttp/psr7@1.9.0",
-			Name:     "guzzlehttp/psr7",
-			Version:  "1.9.0",
+			ID:           "guzzlehttp/psr7@1.9.0",
+			Name:         "guzzlehttp/psr7",
+			Version:      "1.9.0",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 208,
@@ -58,12 +58,12 @@ var (
 			},
 		},
 		{
-			ID:       "pear/log@1.13.3",
-			Name:     "pear/log",
-			Version:  "1.13.3",
+			ID:           "pear/log@1.13.3",
+			Name:         "pear/log",
+			Version:      "1.13.3",
 			Relationship: ftypes.RelationshipUnknown,
-			Dev:      true,
-			Licenses: []string{"MIT"},
+			Dev:          true,
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 660,
@@ -72,12 +72,12 @@ var (
 			},
 		},
 		{
-			ID:       "pear/pear_exception@v1.0.2",
-			Name:     "pear/pear_exception",
-			Version:  "v1.0.2",
+			ID:           "pear/pear_exception@v1.0.2",
+			Name:         "pear/pear_exception",
+			Version:      "v1.0.2",
 			Relationship: ftypes.RelationshipUnknown,
-			Dev:      true,
-			Licenses: []string{"BSD-2-Clause"},
+			Dev:          true,
+			Licenses:     []string{"BSD-2-Clause"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 720,
@@ -86,11 +86,11 @@ var (
 			},
 		},
 		{
-			ID:       "psr/http-message@1.0.1",
-			Name:     "psr/http-message",
-			Version:  "1.0.1",
+			ID:           "psr/http-message@1.0.1",
+			Name:         "psr/http-message",
+			Version:      "1.0.1",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 318,
@@ -99,11 +99,11 @@ var (
 			},
 		},
 		{
-			ID:       "ralouphie/getallheaders@3.0.3",
-			Name:     "ralouphie/getallheaders",
-			Version:  "3.0.3",
+			ID:           "ralouphie/getallheaders@3.0.3",
+			Name:         "ralouphie/getallheaders",
+			Version:      "3.0.3",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 371,
@@ -112,11 +112,11 @@ var (
 			},
 		},
 		{
-			ID:       "symfony/polyfill-intl-idn@v1.27.0",
-			Name:     "symfony/polyfill-intl-idn",
-			Version:  "v1.27.0",
+			ID:           "symfony/polyfill-intl-idn@v1.27.0",
+			Name:         "symfony/polyfill-intl-idn",
+			Version:      "v1.27.0",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 415,
@@ -125,11 +125,11 @@ var (
 			},
 		},
 		{
-			ID:       "symfony/polyfill-intl-normalizer@v1.27.0",
-			Name:     "symfony/polyfill-intl-normalizer",
-			Version:  "v1.27.0",
+			ID:           "symfony/polyfill-intl-normalizer@v1.27.0",
+			Name:         "symfony/polyfill-intl-normalizer",
+			Version:      "v1.27.0",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT"},
+			Licenses:     []string{"MIT"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 502,
@@ -138,11 +138,11 @@ var (
 			},
 		},
 		{
-			ID:       "symfony/polyfill-php72@v1.27.0",
-			Name:     "symfony/polyfill-php72",
-			Version:  "v1.27.0",
+			ID:           "symfony/polyfill-php72@v1.27.0",
+			Name:         "symfony/polyfill-php72",
+			Version:      "v1.27.0",
 			Relationship: ftypes.RelationshipUnknown,
-			Licenses: []string{"MIT", "BSD-2-Clause"},
+			Licenses:     []string{"MIT", "BSD-2-Clause"},
 			Locations: []ftypes.Location{
 				{
 					StartLine: 584,
@@ -203,20 +203,20 @@ func TestParse(t *testing.T) {
 			file: "testdata/composer_ext_prefix.lock",
 			wantPkgs: []ftypes.Package{
 				{
-					ID:        "acme/app@1.0.0",
-					Name:      "acme/app",
-					Version:   "1.0.0",
-			Relationship: ftypes.RelationshipUnknown,
-					Licenses:  []string{"MIT"},
-					Locations: []ftypes.Location{{StartLine: 3, EndLine: 12}},
+					ID:           "acme/app@1.0.0",
+					Name:         "acme/app",
+					Version:      "1.0.0",
+					Relationship: ftypes.RelationshipUnknown,
+					Licenses:     []string{"MIT"},
+					Locations:    []ftypes.Location{{StartLine: 3, EndLine: 12}},
 				},
 				{
-					ID:        "extension/foo@1.2.0",
-					Name:      "extension/foo",
-					Version:   "1.2.0",
-			Relationship: ftypes.RelationshipUnknown,
-					Licenses:  []string{"MIT"},
-					Locations: []ftypes.Location{{StartLine: 13, EndLine: 17}},
+					ID:           "extension/foo@1.2.0",
+					Name:         "extension/foo",
+					Version:      "1.2.0",
+					Relationship: ftypes.RelationshipUnknown,
+					Licenses:     []string{"MIT"},
+					Locations:    []ftypes.Location{{StartLine: 13, EndLine: 17}},
 				},
 			},
 			wantDeps: []ftypes.Dependency{

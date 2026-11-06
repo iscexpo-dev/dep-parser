@@ -78,30 +78,30 @@ func TestParse(t *testing.T) {
 			name:      "with replace directive",
 			inputFile: "testdata/replace.elf",
 			wantPkgs: []ftypes.Package{
-		{
-			ID:           "github.com/ebati/trivy-mod-parse",
-			Name:         "github.com/ebati/trivy-mod-parse",
-			Version:      "",
-			Relationship: ftypes.RelationshipRoot,
-		},
+				{
+					ID:           "github.com/ebati/trivy-mod-parse",
+					Name:         "github.com/ebati/trivy-mod-parse",
+					Version:      "",
+					Relationship: ftypes.RelationshipRoot,
+				},
 				{
 					ID:           "stdlib@v1.16.4",
 					Name:         "stdlib",
 					Version:      "v1.16.4",
 					Relationship: ftypes.RelationshipDirect,
 				},
-		{
-			ID:           "github.com/davecgh/go-spew@v1.1.1",
-			Name:         "github.com/davecgh/go-spew",
-			Version:      "v1.1.1",
-			Relationship: ftypes.RelationshipUnknown,
-		},
-		{
-			ID:           "github.com/go-sql-driver/mysql@v1.5.0",
-			Name:         "github.com/go-sql-driver/mysql",
-			Version:      "v1.5.0",
-			Relationship: ftypes.RelationshipUnknown,
-		},
+				{
+					ID:           "github.com/davecgh/go-spew@v1.1.1",
+					Name:         "github.com/davecgh/go-spew",
+					Version:      "v1.1.1",
+					Relationship: ftypes.RelationshipUnknown,
+				},
+				{
+					ID:           "github.com/go-sql-driver/mysql@v1.5.0",
+					Name:         "github.com/go-sql-driver/mysql",
+					Version:      "v1.5.0",
+					Relationship: ftypes.RelationshipUnknown,
+				},
 			},
 			wantDeps: []ftypes.Dependency{
 				{

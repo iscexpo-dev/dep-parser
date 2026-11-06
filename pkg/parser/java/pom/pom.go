@@ -11,10 +11,10 @@ import (
 	"github.com/samber/lo"
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/licensing"
+	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
 	"github.com/khulnasoft/dep-parser/pkg/set"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xslices "github.com/khulnasoft/dep-parser/pkg/x/slices"
 )
 

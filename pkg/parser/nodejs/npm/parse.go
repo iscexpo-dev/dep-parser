@@ -14,12 +14,12 @@ import (
 	"github.com/samber/lo"
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
+	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/parser/nodejs/packagejson"
 	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
-	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/set"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 	xjson "github.com/khulnasoft/dep-parser/pkg/x/json"
 )

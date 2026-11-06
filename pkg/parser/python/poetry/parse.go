@@ -7,12 +7,12 @@ import (
 	"github.com/BurntSushi/toml"
 	"golang.org/x/xerrors"
 
-	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
+	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/parser/python"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
-	"github.com/khulnasoft/dep-parser/pkg/log"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
+	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
 )
 
 type Lockfile struct {
@@ -137,7 +137,7 @@ func (p *Parser) parseDependency(name string, versRange any, pkgVersions map[str
 
 // matchVersion checks if the package version satisfies the given constraint.
 func matchVersion(currentVersion, constraint string) (bool, error) {
-		v, err := pep440.Parse(currentVersion)
+	v, err := pep440.Parse(currentVersion)
 	if err != nil {
 		return false, xerrors.Errorf("python version error (%s): %s", currentVersion, err)
 	}

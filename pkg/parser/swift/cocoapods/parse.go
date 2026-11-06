@@ -9,10 +9,10 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
+	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/parser/utils"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
-	"github.com/khulnasoft/dep-parser/pkg/log"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 )
 

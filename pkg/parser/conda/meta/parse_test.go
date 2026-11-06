@@ -23,8 +23,8 @@ func TestParse(t *testing.T) {
 			input: "testdata/_libgcc_mutex-0.1-main.json",
 			want: []types.Package{
 				{
-					Name:    "_libgcc_mutex",
-					Version: "0.1",
+					Name:     "_libgcc_mutex",
+					Version:  "0.1",
 					LangType: types.Conda,
 				},
 			},

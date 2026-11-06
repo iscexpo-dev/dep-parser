@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/types"
 )
 

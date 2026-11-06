@@ -73,20 +73,20 @@ type Identifier struct {
 
 // Package represents a dependency package
 type Package struct {
-	ID                 string            `json:",omitempty"`
-	Name               string            `json:",omitempty"`
-	Version            string            `json:",omitempty"`
-	LangType           LangType          `json:",omitempty"`
-	Locations          Locations         `json:",omitempty"`
-	Relationship       Relationship      `json:",omitempty"`
-	DependsOn          []string          `json:",omitempty"`
-	ExternalReferences []ExternalRef     `json:",omitempty"`
-	Licenses           []string          `json:",omitempty"`
-	Dev                bool              `json:",omitempty"`
-	Indirect           bool              `json:",omitempty"`
-	Identifier         Identifier        `json:",omitempty"`
-	Module             bool              `json:",omitempty"`
-	FilePath           string            `json:",omitempty"`
+	ID                 string        `json:",omitempty"`
+	Name               string        `json:",omitempty"`
+	Version            string        `json:",omitempty"`
+	LangType           LangType      `json:",omitempty"`
+	Locations          Locations     `json:",omitempty"`
+	Relationship       Relationship  `json:",omitempty"`
+	DependsOn          []string      `json:",omitempty"`
+	ExternalReferences []ExternalRef `json:",omitempty"`
+	Licenses           []string      `json:",omitempty"`
+	Dev                bool          `json:",omitempty"`
+	Indirect           bool          `json:",omitempty"`
+	Identifier         Identifier    `json:",omitempty"`
+	Module             bool          `json:",omitempty"`
+	FilePath           string        `json:",omitempty"`
 }
 
 // Packages is a slice of Package
@@ -181,9 +181,9 @@ func (e *UserError) Error() string {
 type Relationship string
 
 const (
-	RelationshipRoot     Relationship = "root"
-	RelationshipDirect   Relationship = "direct"
-	RelationshipIndirect Relationship = "indirect"
-	RelationshipUnknown  Relationship = "unknown"
+	RelationshipRoot      Relationship = "root"
+	RelationshipDirect    Relationship = "direct"
+	RelationshipIndirect  Relationship = "indirect"
+	RelationshipUnknown   Relationship = "unknown"
 	RelationshipWorkspace Relationship = "workspace"
 )

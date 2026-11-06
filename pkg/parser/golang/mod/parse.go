@@ -14,7 +14,7 @@ import (
 	"golang.org/x/mod/modfile"
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 )

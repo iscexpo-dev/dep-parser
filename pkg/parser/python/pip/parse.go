@@ -11,10 +11,10 @@ import (
 	"golang.org/x/text/transform"
 	"golang.org/x/xerrors"
 
-	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
+	pep440 "github.com/khulnasoft/go-version-lib/pkg/pep440"
 )
 
 const (

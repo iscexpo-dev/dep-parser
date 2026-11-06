@@ -6,8 +6,8 @@ import (
 
 	"github.com/mitchellh/hashstructure/v2"
 
-	"github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	"github.com/khulnasoft/dep-parser/pkg/types"
 )
 
 // ID returns a unique ID for the given library.

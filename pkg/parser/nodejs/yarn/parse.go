@@ -11,9 +11,9 @@ import (
 
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 	xslices "github.com/khulnasoft/dep-parser/pkg/x/slices"
 )

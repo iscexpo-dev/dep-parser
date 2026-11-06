@@ -8,10 +8,10 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	"github.com/khulnasoft/go-version-lib/pkg/version"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
+	"github.com/khulnasoft/go-version-lib/pkg/version"
 )
 
 type environment struct {

@@ -82,7 +82,7 @@ func (d *Dependencies) UnmarshalTOML(data any) error {
 				continue
 			}
 			// Save only the name, normalized (PEP 503) to match the names from poetry.lock/pylock.toml.
-			d.Set.Append(python.NormalizePkgName(fields[0], true))
+			d.Append(python.NormalizePkgName(fields[0], true))
 		}
 	default:
 		return xerrors.Errorf("dependencies must be a map, but got: %T", data)

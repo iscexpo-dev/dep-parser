@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/log"
 	"github.com/khulnasoft/dep-parser/pkg/set"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	"github.com/khulnasoft/dep-parser/pkg/version/doc"
 	xslices "github.com/khulnasoft/dep-parser/pkg/x/slices"
 )

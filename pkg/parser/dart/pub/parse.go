@@ -6,11 +6,11 @@ import (
 	"golang.org/x/xerrors"
 	"gopkg.in/yaml.v3"
 
-	version "github.com/khulnasoft/go-version-lib/pkg/version"
-	"github.com/khulnasoft/dep-parser/pkg"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
+	version "github.com/khulnasoft/go-version-lib/pkg/version"
 )
 
 const (

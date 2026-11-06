@@ -8,10 +8,10 @@ import (
 	"github.com/samber/lo"
 	"golang.org/x/xerrors"
 
-	"github.com/khulnasoft/dep-parser/pkg"
-	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
+	dependency "github.com/khulnasoft/dep-parser/pkg"
 	"github.com/khulnasoft/dep-parser/pkg/licensing"
 	"github.com/khulnasoft/dep-parser/pkg/log"
+	ftypes "github.com/khulnasoft/dep-parser/pkg/types"
 	xio "github.com/khulnasoft/dep-parser/pkg/x/io"
 	xjson "github.com/khulnasoft/dep-parser/pkg/x/json"
 )
